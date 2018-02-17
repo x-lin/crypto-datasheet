@@ -12,7 +12,7 @@ import java.util.function.Function;
  * @author LinX
  */
 public class CsvCoin {
-    private static final DecimalFormat TWO_PLACES_DEC_FORMAT = new DecimalFormat("#,##");
+    private static final DecimalFormat TWO_PLACES_DEC_FORMAT = new DecimalFormat("#.##");
 
     private static final List<ColumnSpec> COLUMN_SPEC = ImmutableList.of( //
             ColumnSpec.column("symbol", c -> c.symbol), //
@@ -97,7 +97,7 @@ public class CsvCoin {
     }
 
     private static String calcPercentage(final Double part, final Double whole) {
-        return part != null && whole != null ? String.valueOf(part / whole * 100) : null;
+        return part != null && whole != null ? String.valueOf(TWO_PLACES_DEC_FORMAT.format(part / whole * 100)) : null;
     }
 
     private static String doubleToString(final Double value) {
@@ -206,19 +206,16 @@ public class CsvCoin {
         }
 
         public Builder withStartDate(final String startDate) {
-            if (this.name != null) {
-                System.out.println("Overwriting coin " + this.name);
-            }
             this.startDate = startDate;
             return this;
         }
 
         public boolean matchesName(final String name) {
-            return Objects.equals(this.name.toLowerCase(), name.toLowerCase());
+            return Objects.equals(trimString(this.name), trimString(name));
         }
 
         public boolean matchesSymbol(final String symbol) {
-            return Objects.equals(this.symbol.toLowerCase(), symbol.toLowerCase());
+            return Objects.equals(this.symbol.toLowerCase().trim(), symbol.toLowerCase().trim());
         }
 
         CsvCoin build() {
@@ -227,6 +224,10 @@ public class CsvCoin {
 
         public String getName() {
             return this.name;
+        }
+
+        private static String trimString(final String original) {
+            return original.toLowerCase().trim().replace(" ", "");
         }
     }
 }
