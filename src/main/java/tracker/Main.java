@@ -63,7 +63,7 @@ public class Main {
         return builders.stream().filter(b -> {
             boolean match = b.matchesSymbol(c.symbol);
             if (match) {
-                System.out.println("Only symbol match for " + c.coinName + ": name=" + c.coinName +
+                System.out.println("Only symbol match for " + c.symbol + ": name=" + c.coinName +
                         "/" + b.getName());
             }
             return match;
